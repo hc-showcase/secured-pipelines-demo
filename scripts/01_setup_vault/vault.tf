@@ -27,3 +27,9 @@ resource "local_file" "vault_admin_token" {
     content  = hcp_vault_cluster_admin_token.vault_admin_token.token
     filename = "temp_data/vault_admin_token"
 }
+
+# The default namespace when creating a HCP cluster
+resource "local_file" "vault_admin_namespace" {
+    content  = "admin"
+    filename = "temp_data/vault_admin_namespace"
+}

@@ -1,9 +1,6 @@
 #!/bin/sh
 
-set -e
-
-export VAULT_ADDR=http://127.0.0.1:8200
-export VAULT_TOKEN=root
+. 99_source_temp_data.sh
 
 source azure_creds
 vault kv put secret/myproject/tfc \

@@ -1,11 +1,8 @@
 #!/bin/sh
 
-set -e
+. 99_source_temp_data.sh
 
-export VAULT_ADDR=http://127.0.0.1:8200
-export VAULT_TOKEN=root
 vault auth disable jwt
-
 vault auth enable jwt
 
 vault policy write myproject - <<EOF
@@ -82,6 +79,9 @@ vault write auth/jwt/config \
     jwks_url="https://gitlab.com/-/jwks" \
     bound_issuer="gitlab.com"
 
+echo
 vault read auth/jwt/config
+echo
 vault read auth/jwt/role/myproject
+echo
 vault read auth/jwt/role/myproject2
