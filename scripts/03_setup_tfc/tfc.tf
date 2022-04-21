@@ -12,17 +12,9 @@ resource "tfe_team" "team1" {
   organization = data.tfe_organization.mkaesz-dev.name
 }
 
-resource "tfe_team_token" "team1_token" {
-  team_id = tfe_team.team1.id
-}
-
 resource "tfe_team" "team2" {
   name         = "team2"
   organization = data.tfe_organization.mkaesz-dev.name
-}
-
-resource "tfe_team_token" "team2_token" {
-  team_id = tfe_team.team2.id
 }
 
 resource "local_file" "tfc_team1_id" {
