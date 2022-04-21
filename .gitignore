@@ -35,4 +35,4 @@ terraform.rc
 .terraform.lock.hcl
 
 # Ignore all temp data folder
-# **/temp_data/*
+**/temp_data/*
