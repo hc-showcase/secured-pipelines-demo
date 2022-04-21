@@ -6,6 +6,7 @@ terraform {
   }
 }
 
+# GITLAB_TOKEN set as environment variable
 provider "gitlab" {
 }
 
