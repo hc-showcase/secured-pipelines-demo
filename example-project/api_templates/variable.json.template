@@ -1,0 +1,21 @@
+{
+  "data": {
+    "type": "vars",
+    "attributes": {
+      "key": "my-key",
+      "value": "my-value",
+      "category": "my-category",
+      "hcl": false,
+      "sensitive": "my-sensitive"
+    },
+    "relationships": {
+      "workspace": {
+        "data": {
+          "id": "my-workspace-id",
+          "type": "workspaces"
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,18 @@
+{
+  "data": {
+    "attributes": {
+      "is-destroy":false,
+      "message":"Queued from GitLab CI/CD Pipeline"
+    },
+    "type":"runs",
+    "relationships": {
+      "workspace": {
+        "data": {
+          "type": "workspaces",
+          "id": "my-workspace-id"
+        }
+      }
+    }
+  }
+}
+
