@@ -3,7 +3,7 @@
 . 99_source_temp_data.sh
 
 function tf() {
-	cd 05_configure_vault_jwt_auth
+	cd 05_configure_vault_gitlab_jwt_auth
 	terraform init
 	terraform apply --auto-approve
 }
