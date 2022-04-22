@@ -3,14 +3,11 @@
 tf() {
 	cd 03_setup_tfc
 	terraform init
-	terraform apply
+	terraform apply --auto-approve
 }
 
 cmd() {
-	vault secrets disable terraform
-	vault secrets enable terraform
-
-	vault write terraform/config token=$TFC_SECURED_PIPELINE_DEMO
+	echo
 }
 
 case $1 in

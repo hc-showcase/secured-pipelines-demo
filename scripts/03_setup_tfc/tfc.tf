@@ -28,7 +28,7 @@ resource "local_file" "tfc_team2_id" {
 }
 
 resource "local_file" "org" {
-    content  = data.tfe_organization.name
+    content  = data.tfe_organization.mkaesz-dev.name
     filename = "temp_data/tfc_org_name"
 }
 
