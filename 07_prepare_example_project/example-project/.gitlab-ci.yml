@@ -7,70 +7,16 @@ prepare-setup-run:
   stage: tfc-job
   script:
     - echo "JWT token is masked $CI_JOB_JWT!"
-    - export VAULT_ADDR="http://vault:8200"
-    - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=myproject jwt=${CI_JOB_JWT})"
-    - export TFC_TOKEN=$(vault read terraform/creds/team-myproject -format=json | jq -r ".data.token")
-    - export TFC_WS="$(vault kv get -field=ws secret/myproject/tfc)"
+    - export VAULT_ADDR=$VAULT_ADDR
+    - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=secured-pipeline-project1 jwt=${CI_JOB_JWT})"
+    - echo "VAULT token is $VAULT_TOKEN"
+    - export TFC_TOKEN=$(vault read terraform/creds/user-token -format=json | jq -r ".data.token")
+    - export TFC_WS=$TFC_WS
     - echo "TFC WS name is $TFC_WS!"
-    - export TFC_ORG="$(vault kv get -field=org secret/myproject/tfc)"
+    - export TFC_ORG=$TFC_ORG
     - echo "TFC_ORG name is $TFC_ORG!"
-    - export TFC_ADDR="$(vault kv get -field=addr secret/myproject/tfc)"
-    - echo "TFC_ADDR name is $TFC_ADDR!"
-    - export ARM_TENANT_ID="$(vault kv get -field=ARM_TENANT_ID secret/myproject/tfc)"
-    - echo "ARM_TENANT_ID name is $ARM_TENANT_ID!"
-    - export ARM_SUBSCRIPTION_ID="$(vault kv get -field=ARM_SUBSCRIPTION_ID secret/myproject/tfc)"
-    - echo "ARM_SUBSCRIPTION_ID name is $ARM_SUBSCRIPTION_ID!"
-    - >
-      curl -s --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" "https://${TFC_ADDR}/api/v2/organizations/${TFC_ORG}/workspaces/${TFC_WS}" | jq -r .data.id > workspace_id
-    - export workspace_id=$(cat workspace_id)
-    - echo "Workspace ID is ${workspace_id}"
-    - >
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" "https://${TFC_ADDR}/api/v2/vars?filter%5Borganization%5D%5Bname%5D=${TFC_ORG}&filter%5Bworkspace%5D%5Bname%5D=${TFC_WS}" > vars.json
-    - x=$(cat vars.json | jq -r ".data[].id" | wc -l | awk '{print $1}')
-    - >
-      for (( i=0; i<$x; i++ ))
-      do
-        curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --request DELETE https://${TFC_ADDR}/api/v2/vars/$(cat vars.json | jq -r ".data[$i].id")
-      done
-    - >
-      if [ ! -z "$CI_JOB_JWT" ]; then
-      sed -e "s/my-key/TF_VAR_ARM_TENANT_ID/" -e "s/my-hcl/false/" -e "s/my-value/${ARM_TENANT_ID}/" -e "s/my-category/env/" -e "s/my-sensitive/true/" -e "s/my-workspace-id/${workspace_id}/" < api_templates/variable.json.template  > variable1.json;
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --data @variable1.json "https://${TFC_ADDR}/api/v2/vars";
-      sed -e "s/my-key/TF_VAR_ARM_SUBSCRIPTION_ID/" -e "s/my-hcl/false/" -e "s/my-value/${ARM_SUBSCRIPTION_ID}/" -e "s/my-category/env/" -e "s/my-sensitive/true/" -e "s/my-workspace-id/${workspace_id}/" < api_templates/variable.json.template  > variable2.json;
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --data @variable2.json "https://${TFC_ADDR}/api/v2/vars";
-      sed -e "s/my-key/TF_VAR_GITLAB_JWT_ROLE/" -e "s/my-hcl/false/" -e "s/my-value/myproject/" -e "s/my-category/env/" -e "s/my-sensitive/true/" -e "s/my-workspace-id/${workspace_id}/" < api_templates/variable.json.template  > variable3.json;
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --data @variable3.json "https://${TFC_ADDR}/api/v2/vars";
-      sed -e "s/my-key/TF_VAR_GITLAB_JWT_TOKEN/" -e "s/my-hcl/false/" -e "s/my-value/${CI_JOB_JWT}/" -e "s/my-category/env/" -e "s/my-sensitive/true/" -e "s/my-workspace-id/${workspace_id}/" < api_templates/variable.json.template  > variable.json;
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --data @variable.json "https://${TFC_ADDR}/api/v2/vars"; fi
-    - tar -cvf myconfig.tar tf/*
-    - gzip myconfig.tar
-    - >
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --data @api_templates/configversion.json "https://${TFC_ADDR}/api/v2/workspaces/${workspace_id}/configuration-versions" > configuration_version.txt
-    - cat configuration_version.txt
-    - export config_version_id=$(cat configuration_version.txt | jq -r .data.id)
-    - export upload_url=$(cat configuration_version.txt | jq -r '.["data"]["attributes"]["upload-url"]')
-    - echo "Config Version ID is ${config_version_id}"
-    - echo "Upload URL is ${upload_url}"
-    - >
-      curl --header "Content-Type: application/octet-stream" --request PUT --data-binary "@myconfig.tar.gz" "${upload_url}"
-    - sed "s/my-workspace-id/${workspace_id}/" < api_templates/run.json.template  > run.json
-    - cat run.json
-    - >
-      curl --header "Authorization: Bearer ${TFC_TOKEN}" --header "Content-Type: application/vnd.api+json" --data @run.json https://${TFC_ADDR}/api/v2/runs > run_result.txt
-    - cat run_result.txt
-    - run_id=$(cat run_result.txt | jq -r .data.id)
-    - echo "Run ID is ${run_id}"
-    - result="pending"
-    - >
-      while [[ ${result} != "applied" && ${result} != "discarded" && ${result} != "errored" && ${result} != "canceled" && ${result} != "force_canceled" && ${result} != "policy_override" && ${result} != "planned_and_finished" ]]; do
-        curl --header "Authorization: Bearer $TFC_TOKEN" --header "Content-Type: application/vnd.api+json" https://${TFC_ADDR}/api/v2/runs/${run_id} > result.txt
-        result=$(cat result.txt | jq -r .data.attributes.status)
-        echo "\n Run status is ${result}."
-        sleep 20
-      done
-    - if [[ ${result} == "applied" || ${result} == "planned_and_finished" ]]; then exit 0; else exit 1; fi
-    - echo "\n Run status is ${result}. View this Run in TFC UI:"
-    - echo "https://${TFC_ADDR}/app/${TFC_ORG}/workspaces/${TFC_WS}/runs/${run_id}"
+    - export TFC_ADDR=$TFC_URL!
+    - echo "TFC_ADDR name is $TFC_URL!"
 
 
 
