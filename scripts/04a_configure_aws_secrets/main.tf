@@ -5,6 +5,7 @@ resource "vault_aws_secret_backend" "aws" {
   secret_key = var.aws_secret_key
   path       = "${var.name}"
   description = "The AWS secrets backend used to generate dynamic credentials."
+  region = "eu-central-1"
 
   default_lease_ttl_seconds = "120"
   max_lease_ttl_seconds     = "240"
