@@ -3,7 +3,7 @@
 . 99_source_temp_data.sh
 
 tf() {
-	cd 07_configure_vault_tfc_secrets
+	cd 05_configure_vault_tfc_secrets
 	terraform init
 	terraform apply --auto-approve
 }

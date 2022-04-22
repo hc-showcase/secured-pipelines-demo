@@ -1,7 +1,7 @@
 #!/bin/sh
 
 tf() {
-	cd 08_prepare_example_project
+	cd 07_prepare_example_project
 	terraform init
 	terraform apply --auto-approve
 }
