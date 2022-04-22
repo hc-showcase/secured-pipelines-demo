@@ -26,3 +26,9 @@ resource "local_file" "tfc_team2_id" {
     content  = tfe_team.team2.id
     filename = "temp_data/tfc_team2_id"
 }
+
+resource "local_file" "org" {
+    content  = data.tfe_organization.name
+    filename = "temp_data/tfc_org_name"
+}
+
