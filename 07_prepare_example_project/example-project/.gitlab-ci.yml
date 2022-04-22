@@ -1,27 +1,59 @@
 stages:
-  - tfc-job
-default:
+  - prep
+  - plan
+  - apply
+
+Prep:
   image: kaparora/gitlab-runner-image:latest
-
-prepare-setup-run:
-  stage: tfc-job
+  stage: prep
   script:
-    - echo "JWT token is masked $CI_JOB_JWT!"
-    - export VAULT_ADDR=$VAULT_ADDR
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=secured-pipeline-project1 jwt=${CI_JOB_JWT})"
+    - echo "VAULT_TOKEN=$VAULT_TOKEN">vars
     - echo "VAULT token is $VAULT_TOKEN"
-    - export TFC_TOKEN=$(vault read terraform/creds/user-token -format=json | jq -r ".data.token")
+    - TFC_TOKEN=$(vault read terraform/creds/user-token -format=json | jq -r ".data.token")
+    - echo "TFC_TOKEN=$TFC_TOKEN">>vars
     - echo "TFC token is $TFC_TOKEN"
-    - export TFC_WS=$TFC_WS
     - echo "TFC WS name is $TFC_WS!"
-    - export TFC_ORG=$TFC_ORG
     - echo "TFC_ORG name is $TFC_ORG!"
-    - export TFC_ADDR=$TFC_URL!
     - echo "TFC_ADDR name is $TFC_URL!"
+  artifacts:
+    paths:
+      - vars
 
+Plan:
+  image:
+    name: hashicorp/terraform
+    entrypoint: [""]
+  stage: plan
+  dependencies:
+    - Prep
+  script:
+    - |
+      cat << EOF > config.remote.tfbackend
+      workspaces { name = "$TFC_WS" }
+      hostname     = "$TFC_URL"
+      organization = "$TFC_ORG"
+      token        = "$(cat vars | grep TFC_TOKEN | cut -d = -f2)"
+      EOF
+    - terraform --version
+    - terraform init -backend-config=config.remote.tfbackend
+    - terraform plan
 
-
-
-
-
+Apply:
+  image:
+    name: hashicorp/terraform
+    entrypoint: [""]
+  when: manual
+  stage: apply
+  script:
+    - |
+      cat << EOF > config.remote.tfbackend
+      workspaces { name = "$TFC_WS" }
+      hostname     = "$TFC_URL"
+      organization = "$TFC_ORG"
+      token        = "$(cat vars | grep TFC_TOKEN | cut -d = -f2)"
+      EOF
+    - terraform --version
+    - terraform init -backend-config=config.remote.tfbackend
+    - terraform apply -auto-approve
 

@@ -8,7 +8,7 @@ resource "vault_jwt_auth_backend" "jwt_auth" {
     bound_issuer        = "gitlab.com"
 }
 
-resource "local_file" "vault_admin_token" {
+resource "local_file" "vault_auth_path" {
     content  = vault_jwt_auth_backend.jwt_auth.path 
     filename = "temp_data/vault_jwt_auth_path"
 }

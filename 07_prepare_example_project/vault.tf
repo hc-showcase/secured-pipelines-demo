@@ -48,3 +48,8 @@ resource "vault_jwt_auth_backend_role" "jwt_auth" {
   user_claim      = "user_email"
   role_type       = "jwt"
 }
+
+resource "local_file" "vault_jwt_auth_role" {
+    content  = vault_jwt_auth_backend_role.jwt_auth.role_name
+    filename = "temp_data/vault_jwt_auth_role"
+}

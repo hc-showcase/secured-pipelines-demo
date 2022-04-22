@@ -11,7 +11,7 @@ resource "vault_aws_secret_backend" "aws" {
   max_lease_ttl_seconds     = "240"
 }
 
-resource "vault_aws_secret_backend_role" "admin" {
+resource "vault_aws_secret_backend_role" "aws-role" {
   backend         = vault_aws_secret_backend.aws.path
   name            = "${var.name}-role"
   credential_type = "iam_user"
@@ -32,3 +32,12 @@ resource "vault_aws_secret_backend_role" "admin" {
 EOF
 }
 
+resource "local_file" "vault_aws_secret_backend_path" {
+    content  = vault_aws_secret_backend.aws.path
+    filename = "temp_data/vault_aws_secret_backend_path"
+}
+
+resource "local_file" "vault_aws_secret_backend_role" {
+    content  = vault_aws_secret_backend_role.aws-role.name
+    filename = "temp_data/vault_aws_secret_backend_role"
+}

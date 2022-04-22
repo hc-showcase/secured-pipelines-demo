@@ -33,7 +33,7 @@ resource "gitlab_project_variable" "vault_namespace" {
 resource "gitlab_project_variable" "tfc_url" {
   project   = gitlab_project.secured-pipeline-project1.id
   key       = "TFC_URL"
-  value     = "https://app.terraform.io/"
+  value     = "app.terraform.io"
   protected = false
 }
 
@@ -51,7 +51,7 @@ resource "gitlab_project_variable" "tfc_workspace" {
   protected = false
 }
 
-resource "gitlab_repository_file" "this" {
+resource "gitlab_repository_file" "pipeline" {
   project        = gitlab_project.secured-pipeline-project1.id
   content        = file("example-project/.gitlab-ci.yml")
   file_path      = ".gitlab-ci.yml"
@@ -59,4 +59,14 @@ resource "gitlab_repository_file" "this" {
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
   commit_message = "added gitlab pipeline descriptor"
+}
+
+resource "gitlab_repository_file" "main_tf" {
+  project        = gitlab_project.secured-pipeline-project1.id
+  content        = file("example-project/tf/aws/main.tf")
+  file_path      = "main.tf"
+  branch         = "main"
+  author_email   = "terraform@example.com"
+  author_name    = "Terraform"
+  commit_message = "added main.tf"
 }
