@@ -1,20 +1,25 @@
 #!/bin/sh
 
-set -e
+. 99_source_temp_data.sh
 
-export VAULT_ADDR=http://127.0.0.1:8200
-export VAULT_TOKEN=root
-vault secrets disable azure
-vault secrets enable azure
-source  azure_creds
-echo $ARM_CLIENT_ID
-vault write azure/config \
-subscription_id=$ARM_SUBSCRIPTION_ID \
-tenant_id=$ARM_TENANT_ID \
-client_id=$ARM_CLIENT_ID \
-client_secret=$ARM_CLIENT_SECRET
+tf() {
+	cd 04b_configure_azure_secrets
+	terraform init
+	terraform apply --auto-approve
+}
 
-vault write azure/roles/myproject ttl=1h azure_roles=-<<EOF
+cmd() {
+	vault secrets disable azure
+	vault secrets enable azure
+	source azure_creds
+	echo $ARM_CLIENT_ID
+	vault write azure/config \
+		subscription_id=$ARM_SUBSCRIPTION_ID \
+		tenant_id=$ARM_TENANT_ID \
+		client_id=$ARM_CLIENT_ID \
+		client_secret=$ARM_CLIENT_SECRET
+
+	vault write azure/roles/myproject ttl=1h azure_roles=- <<EOF
     [
         {
             "role_name": "Contributor",
@@ -27,9 +32,9 @@ vault write azure/roles/myproject ttl=1h azure_roles=-<<EOF
     ]
 EOF
 
-vault read azure/creds/myproject
+	vault read azure/creds/myproject
 
-vault write azure/roles/myproject2 ttl=1h azure_roles=-<<EOF
+	vault write azure/roles/myproject2 ttl=1h azure_roles=- <<EOF
     [
         {
             "role_name": "Contributor",
@@ -42,4 +47,17 @@ vault write azure/roles/myproject2 ttl=1h azure_roles=-<<EOF
     ]
 EOF
 
-vault read azure/creds/myproject2
+	vault read azure/creds/myproject2
+}
+
+case $1 in
+tf)
+	tf
+	;;
+cmd)
+	cmd
+	;;
+*)
+	echo "cmd for command line, tf for terraform"
+	;;
+esac
