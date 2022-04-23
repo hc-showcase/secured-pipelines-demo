@@ -1,0 +1,27 @@
+stages:
+  - tfc-job
+default:
+  image: kaparora/gitlab-runner-image:latest
+
+prepare-setup-run:
+  stage: tfc-job
+  script:
+    - echo "JWT token is masked $CI_JOB_JWT!"
+    - export VAULT_ADDR=$VAULT_ADDR
+    - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=secured-pipeline-project1 jwt=${CI_JOB_JWT})"
+    - echo "VAULT token is $VAULT_TOKEN"
+    - export TFC_TOKEN=$(vault read terraform/creds/user-token -format=json | jq -r ".data.token")
+    - echo "TFC token is $TFC_TOKEN"
+    - export TFC_WS=$TFC_WS
+    - echo "TFC WS name is $TFC_WS!"
+    - export TFC_ORG=$TFC_ORG
+    - echo "TFC_ORG name is $TFC_ORG!"
+    - export TFC_ADDR=$TFC_URL!
+    - echo "TFC_ADDR name is $TFC_URL!"
+
+
+
+
+
+
+
