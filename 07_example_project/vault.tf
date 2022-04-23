@@ -37,6 +37,12 @@ resource "vault_jwt_auth_backend_role" "jwt_auth" {
   role_type       = "jwt"
 }
 
+resource "vault_terraform_cloud_secret_role" "terraform" {
+  backend      = "terraform"
+  name         = "secured-pipeline-project1"
+  team_id      = tfe_team.secured-pipeline-project1.id
+}
+
 resource "local_file" "vault_jwt_auth_role" {
     content  = vault_jwt_auth_backend_role.jwt_auth.role_name
     filename = "temp_data/vault_jwt_auth_role"
