@@ -30,23 +30,30 @@ resource "gitlab_project_variable" "vault_namespace" {
   protected = false
 }
 
-resource "gitlab_project_variable" "tfc_url" {
+resource "gitlab_project_variable" "tfe_address" {
   project   = gitlab_project.secured-pipeline-project1.id
-  key       = "TFC_URL"
-  value     = "app.terraform.io"
+  key       = "TFE_ADDRESS"
+  value     = "https://app.terraform.io"
   protected = false
 }
 
-resource "gitlab_project_variable" "tfc_org" {
+resource "gitlab_project_variable" "tfe_org" {
   project   = gitlab_project.secured-pipeline-project1.id
-  key       = "TFC_ORG"
+  key       = "TFE_ORG"
   value     = file("../03_setup_tfc/temp_data/tfc_org_name")
   protected = false
 }
 
-resource "gitlab_project_variable" "tfc_workspace" {
+resource "gitlab_project_variable" "tfe_workspace_id" {
   project   = gitlab_project.secured-pipeline-project1.id
-  key       = "TFC_WS"
+  key       = "TFE_WS_ID"
+  value     = tfe_workspace.team1-project1.id
+  protected = false
+}
+
+resource "gitlab_project_variable" "tfe_workspace_name" {
+  project   = gitlab_project.secured-pipeline-project1.id
+  key       = "TFE_WS_NAME"
   value     = tfe_workspace.team1-project1.name
   protected = false
 }
@@ -69,4 +76,14 @@ resource "gitlab_repository_file" "main_tf" {
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
   commit_message = "added main.tf"
+}
+
+resource "gitlab_repository_file" "variables_tf" {
+  project        = gitlab_project.secured-pipeline-project1.id
+  content        = file("example-project/tf/aws/variables.tf")
+  file_path      = "variables.tf"
+  branch         = "main"
+  author_email   = "terraform@example.com"
+  author_name    = "Terraform"
+  commit_message = "added variables.tf"
 }

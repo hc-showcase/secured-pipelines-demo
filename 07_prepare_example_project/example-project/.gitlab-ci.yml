@@ -1,42 +1,51 @@
+default:
+  image: mskaesz/secured-iac-pipelines-demo:latest
+
 stages:
   - prep
   - plan
   - apply
 
 Prep:
-  image: kaparora/gitlab-runner-image:latest
   stage: prep
   script:
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=secured-pipeline-project1 jwt=${CI_JOB_JWT})"
     - echo "VAULT_TOKEN=$VAULT_TOKEN">vars
     - echo "VAULT token is $VAULT_TOKEN"
-    - TFC_TOKEN=$(vault read terraform/creds/user-token -format=json | jq -r ".data.token")
-    - echo "TFC_TOKEN=$TFC_TOKEN">>vars
-    - echo "TFC token is $TFC_TOKEN"
-    - echo "TFC WS name is $TFC_WS!"
-    - echo "TFC_ORG name is $TFC_ORG!"
-    - echo "TFC_ADDR name is $TFC_URL!"
+    - export TFE_TOKEN=$(vault read terraform/creds/user-token -format=json | jq -r ".data.token")
+    - echo "TFE_TOKEN=$TFE_TOKEN">>vars
+    - echo "TFE token is $TFE_TOKEN"
+    - echo "TFE WS name is $TFE_WS_NAME"
+    - echo "TFE_ORG name is $TFE_ORG!"
+    - echo "TFE_ADDRESS name is $TFE_ADDRESS!"
+    - response=$(vault read aws/creds/aws-role -format=json)
+    - AWS_ACCESS_KEY_ID=$(echo $response | jq -r '.data.access_key')
+    - AWS_SECRET_ACCESS_KEY=$(echo $response | jq -r '.data.secret_key')
+    - echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID">>vars
+    - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY">>vars
+    - tfe-cli variable delete $TFE_WS_NAME AWS_ACCESS_KEY_ID
+    - tfe-cli variable delete $TFE_WS_NAME AWS_SECRET_ACCESS_KEY
+    - tfe-cli variable create $TFE_WS_NAME --svar AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --var AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
   artifacts:
     paths:
       - vars
 
 Plan:
-  image:
-    name: hashicorp/terraform
-    entrypoint: [""]
   stage: plan
   dependencies:
     - Prep
   script:
     - |
       cat << EOF > config.remote.tfbackend
-      workspaces { name = "$TFC_WS" }
-      hostname     = "$TFC_URL"
-      organization = "$TFC_ORG"
-      token        = "$(cat vars | grep TFC_TOKEN | cut -d = -f2)"
+      workspaces { name = "$TFE_WS_NAME" }
+      hostname     = "$TFE_ADDRESS"
+      organization = "$TFE_ORG"
+      token        = "$(cat vars | grep TFE_TOKEN | cut -d = -f2)"
       EOF
     - terraform --version
     - terraform init -backend-config=config.remote.tfbackend
+    - export TF_VAR_access_key=$(cat vars | grep AWS_ACCESS_KEY_ID | cut -d = -f2)
+    - export TF_VAR_secret_key=$(cat vars | grep AWS_SECRET_ACCESS_KEY | cut -d = -f2)
     - terraform plan
 
 Apply:

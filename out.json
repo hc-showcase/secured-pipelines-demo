@@ -1,0 +1,12 @@
+{
+  "request_id": "2b2624fc-10fd-3dae-bf18-c0746ec5ad95",
+  "lease_id": "aws/creds/aws-role/86OvEU7WrPV0sXwZxG7GSWuw.LJlsn",
+  "lease_duration": 120,
+  "renewable": true,
+  "data": {
+    "access_key": "AKIA6QTAUM7CJMOXB37Q",
+    "secret_key": "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",
+    "security_token": null
+  },
+  "warnings": null
+}
