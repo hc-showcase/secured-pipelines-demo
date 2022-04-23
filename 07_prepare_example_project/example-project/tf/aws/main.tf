@@ -3,20 +3,20 @@ terraform {
 }
 
 provider "vault" {
-  address = var.VAULT_ADDR
+  address = var.vault_addr
   auth_login {
-    path = "auth/jwt/login"
+    path = "auth/${var.vault_aws_secret_backend_path}/login"
 
     parameters = {
-      jwt   = var.GITLAB_JWT_TOKEN
-      role  = var.GITLAB_JWT_ROLE
+      jwt   = var.gitlab_jwt_token
+      role  = var.gitlab_jwt_role
     }
   }
 }
 
 data "vault_aws_access_credentials" "creds" {
-  backend = var.vault_aws_secret_backend_aws_path
-  role    = var.vault_aws_secret_backend_role_name
+  backend = var.vault_aws_secret_backend_path
+  role    = var.vault_aws_secret_backend_role
 }
 
 provider "aws" {

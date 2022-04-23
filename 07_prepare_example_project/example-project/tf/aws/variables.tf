@@ -1,5 +1,5 @@
-variable "vault_aws_secret_backend_aws_path" {}
-variable "vault_aws_secret_backend_role_name" {}
+variable "vault_aws_secret_backend_path" {}
+variable "vault_aws_secret_backend_role" {}
 variable "vault_addr" {}
-variable "access_key" {}
-variable "secret_key" {}
+variable "gitlab_jwt_token" {}
+variable "gitlab_jwt_role" {}

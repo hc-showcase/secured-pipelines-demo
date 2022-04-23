@@ -58,6 +58,20 @@ resource "gitlab_project_variable" "tfe_workspace_name" {
   protected = false
 }
 
+resource "gitlab_project_variable" "vault_aws_secret_backend_path" {
+  project      = gitlab_project.secured-pipeline-project1.id
+  key          = "vault_aws_secret_backend_path"
+  value        = file("../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_path")
+  protected    = false
+}
+
+resource "gitlab_project_variable" "vault_aws_secret_backend_role" {
+  project      = gitlab_project.secured-pipeline-project1.id
+  key          = "vault_aws_secret_backend_role"
+  value        = file("../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_role")
+  protected    = false
+}
+
 resource "gitlab_repository_file" "pipeline" {
   project        = gitlab_project.secured-pipeline-project1.id
   content        = file("example-project/.gitlab-ci.yml")
