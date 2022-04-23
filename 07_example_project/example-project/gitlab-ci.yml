@@ -3,10 +3,9 @@ default:
 
 stages:
   - prep
-  - plan
-  - apply
+  - deploy
 
-Prep:
+prep:
   stage: prep
   script:
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=${CI_PROJECT_NAME} jwt=${CI_JOB_JWT})"
@@ -35,30 +34,20 @@ Prep:
     paths:
       - vars
 
-Plan:
-  stage: plan
+deploy:
+  stage: deploy
   dependencies:
-    - Prep
+    - prep
   script:
     - |
       cat << EOF > config.remote.tfbackend
       workspaces { name = "$TFE_WS_NAME" }
-      hostname     = "$(echo $TFE_ADDRESS |sed 's/https\?:\/\///')"
+      hostname     = "$(echo $TFE_ADDRESS | sed 's/https\?:\/\///')"
       organization = "$TFE_ORG"
       token        = "$(cat vars | grep TFE_TOKEN | cut -d = -f2)"
       EOF
     - terraform --version
     - terraform init -backend-config=config.remote.tfbackend
     - terraform plan
-  artifacts:
-    paths:
-      - config.remote.tfbackend
-Apply:
-  when: manual
-  stage: apply
-  script:
-    - cat config.remote.tfbackend
-    - terraform --version
-    - terraform init -backend-config=config.remote.tfbackend -reconfigure
-    - terraform apply -auto-approve
+    - terraform apply
 
