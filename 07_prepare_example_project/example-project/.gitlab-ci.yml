@@ -17,9 +17,6 @@ Prep:
     - echo "TFE WS name is $TFE_WS_NAME"
     - echo "TFE_ORG name is $TFE_ORG!"
     - echo "TFE_ADDRESS name is $TFE_ADDRESS!"
-    - response=$(vault read ${vault_aws_secret_backend_path}/creds/${vault_aws_secret_backend_role} -format=json)
-    - AWS_ACCESS_KEY_ID=$(echo $response | jq -r '.data.access_key')
-    - AWS_SECRET_ACCESS_KEY=$(echo $response | jq -r '.data.secret_key')
     - tfe-cli variable delete $TFE_WS_NAME vault_aws_secret_backend_path
     - tfe-cli variable delete $TFE_WS_NAME vault_aws_secret_backend_role
     - tfe-cli variable delete $TFE_WS_NAME gitlab_jwt_token
@@ -60,6 +57,7 @@ Apply:
   when: manual
   stage: apply
   script:
+    - cat config.remote.tfbackend
     - terraform --version
     - terraform init -backend-config=config.remote.tfbackend
     - terraform apply -auto-approve

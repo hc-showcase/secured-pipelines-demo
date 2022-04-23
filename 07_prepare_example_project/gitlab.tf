@@ -44,17 +44,10 @@ resource "gitlab_project_variable" "tfe_org" {
   protected = false
 }
 
-resource "gitlab_project_variable" "tfe_workspace_id" {
-  project   = gitlab_project.secured-pipeline-project1.id
-  key       = "TFE_WS_ID"
-  value     = tfe_workspace.team1-project1.id
-  protected = false
-}
-
 resource "gitlab_project_variable" "tfe_workspace_name" {
   project   = gitlab_project.secured-pipeline-project1.id
   key       = "TFE_WS_NAME"
-  value     = tfe_workspace.team1-project1.name
+  value     = tfe_workspace.secured-pipeline-project1.name
   protected = false
 }
 
