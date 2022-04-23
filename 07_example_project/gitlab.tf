@@ -67,7 +67,7 @@ resource "gitlab_project_variable" "vault_aws_secret_backend_role" {
 
 resource "gitlab_repository_file" "pipeline" {
   project        = gitlab_project.secured-pipeline-project1.id
-  content        = file("example-project/.gitlab-ci.yml")
+  content        = file("example-project/gitlab-ci.yml")
   file_path      = ".gitlab-ci.yml"
   branch         = "main"
   author_email   = "terraform@example.com"
