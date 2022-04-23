@@ -3,7 +3,8 @@ default:
 
 stages:
   - prep
-  - deploy
+  - plan
+  - apply
 
 prep:
   stage: prep
@@ -34,8 +35,8 @@ prep:
     paths:
       - vars
 
-deploy:
-  stage: deploy
+plan:
+  stage: plan
   dependencies:
     - prep
   script:
@@ -49,4 +50,14 @@ deploy:
     - terraform --version
     - terraform init -backend-config=config.remote.tfbackend -reconfigure
     - terraform plan
+  artifacts:
+    paths:
+      - config.remote.tfbackend
+apply:
+  stage: apply
+  dependencies:
+    - plan
+  script:
+    - terraform --version
+    - terraform init -backend-config=config.remote.tfbackend -reconfigure
     - terraform apply -auto-approve
