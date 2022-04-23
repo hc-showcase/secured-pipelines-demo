@@ -67,7 +67,7 @@ resource "gitlab_project_variable" "vault_aws_secret_backend_role" {
 
 resource "gitlab_repository_file" "pipeline" {
   project        = gitlab_project.secured-pipeline-project.id
-  content        = file("example-project/gitlab-ci.yml")
+  content        = file("project-blueprint/gitlab-ci.yml")
   file_path      = ".gitlab-ci.yml"
   branch         = "main"
   author_email   = "terraform@example.com"
@@ -77,7 +77,7 @@ resource "gitlab_repository_file" "pipeline" {
 
 resource "gitlab_repository_file" "main_tf" {
   project        = gitlab_project.secured-pipeline-project.id
-  content        = file("example-project/tf/aws/main.tf")
+  content        = file("project-blueprint/tf/aws/main.tf")
   file_path      = "main.tf"
   branch         = "main"
   author_email   = "terraform@example.com"
@@ -87,7 +87,7 @@ resource "gitlab_repository_file" "main_tf" {
 
 resource "gitlab_repository_file" "variables_tf" {
   project        = gitlab_project.secured-pipeline-project.id
-  content        = file("example-project/tf/aws/variables.tf")
+  content        = file("project-blueprint/tf/aws/variables.tf")
   file_path      = "variables.tf"
   branch         = "main"
   author_email   = "terraform@example.com"

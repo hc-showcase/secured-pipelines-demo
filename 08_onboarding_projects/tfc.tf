@@ -20,6 +20,6 @@ resource "tfe_workspace" "secured-pipeline-project" {
 
 resource "tfe_team_access" "secured-pipeline-project" {
   access       = "write"
-  team_id      = tfe_team.secured-pipeline-project1.id
-  workspace_id = tfe_workspace.secured-pipeline-project1.id
+  team_id      = tfe_team.secured-pipeline-project.id
+  workspace_id = tfe_workspace.secured-pipeline-project.id
 }
