@@ -3,7 +3,7 @@
 . 99_source_temp_data.sh
 
 	user_id=$(curl -s \
-    --header "Authorization: Bearer $TFC_USER_TOKEN" \
+    --header "Authorization: Bearer $TFE_USER_TOKEN" \
     --header "Content-Type: application/vnd.api+json" \
     --request GET \
     https://app.terraform.io/api/v2/account/details | jq -r ".data.id")

@@ -7,9 +7,15 @@ data "tfe_organization" "mkaesz-dev" {
   name = "mkaesz-dev"
 }
 
-resource "tfe_team" "team1" {
-  name         = "team1"
+resource "tfe_team" "secured-pipeline-project1" {
+  name         = "secured-pipeline-project1"
   organization = data.tfe_organization.mkaesz-dev.name
+  visibility   = "secret"
+  organization_access {
+    manage_vcs_settings = false
+    manage_policies     = false
+    manage_workspaces   = false
+  }
 }
 
 resource "tfe_team" "team2" {
@@ -17,9 +23,9 @@ resource "tfe_team" "team2" {
   organization = data.tfe_organization.mkaesz-dev.name
 }
 
-resource "local_file" "tfc_team1_id" {
-    content  = tfe_team.team1.id
-    filename = "temp_data/tfc_team1_id"
+resource "local_file" "secured-pipeline-project1_id" {
+    content  = tfe_team.secured-pipeline-project1.id
+    filename = "temp_data/tfc_secured-pipeline-project1_id"
 }
 
 resource "local_file" "tfc_team2_id" {

@@ -9,6 +9,6 @@ resource "vault_terraform_cloud_secret_backend" "terraform" {
 
 resource "vault_terraform_cloud_secret_role" "terraform" {
   backend      = vault_terraform_cloud_secret_backend.terraform.backend
-  name         = "user-token"
-  user_id      = var.tfc_user_id
+  name         = "secured-pipeline-project1"
+  team_id      = file("../03_setup_tfc/temp_data/tfc_secured-pipeline-project1_id")
 }
