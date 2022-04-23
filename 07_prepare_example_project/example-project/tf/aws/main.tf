@@ -5,8 +5,8 @@ terraform {
 provider "vault" {
   address = var.vault_addr
   auth_login {
-    path = "auth/${var.vault_aws_secret_backend_path}/login"
-
+    path = "auth/jwt/login"
+    namespace = var.vault_namespace
     parameters = {
       jwt   = var.gitlab_jwt_token
       role  = var.gitlab_jwt_role

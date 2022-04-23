@@ -5,14 +5,8 @@ resource "vault_policy" "secured-pipeline-project1" {
   name = "secured-pipeline-project1"
 
   policy = <<EOT
-path "secret/data/secured-pipeline-project1/*" {
-  capabilities = [ "read" ]
-}
 path "auth/token/create" {
   capabilities = [ "update" ]
-}
-path "azure/creds/secured-pipeline-project1" {
-  capabilities = [ "read" ]
 }
 path "aws/creds/secured-pipeline-project1" {
   capabilities = [ "read" ]
@@ -20,14 +14,8 @@ path "aws/creds/secured-pipeline-project1" {
 path "terraform/creds/secured-pipeline-project1" {
   capabilities = [ "read" ]
 }
-path "terraform/creds/team1-secured-pipeline-project1" {
-  capabilities = [ "read" ]
-}
 path "terraform/creds/user-token" {
   capabilities = [ "read" ]
-}
-path "azure/*" {
-  capabilities = [ "read", "list" ]
 }
 path "aws/*" {
   capabilities = [ "read", "list" ]

@@ -3,13 +3,13 @@ terraform {
 }
 
 provider "vault" {
-  address = var.VAULT_ADDR
+  address = "https://secured-pipelines-hcp-vault.vault.11eb0eb4-7e24-8bac-8aa6-0242ac110005.aws.hashicorp.cloud:8200"
   auth_login {
     path = "auth/jwt/login"
 
     parameters = {
-      jwt   = var.GITLAB_JWT_TOKEN
-      role  = var.GITLAB_JWT_ROLE
+      jwt   = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRpM3NGRTdzeHFOUE9UN0ZkdmNHQTFaVkdHSV9yLXRzRFhuRXVZVDRacUUiLCJ0eXAiOiJKV1QifQ.eyJuYW1lc3BhY2VfaWQiOiIyNDI2NTMiLCJuYW1lc3BhY2VfcGF0aCI6Im1za2Flc3oiLCJwcm9qZWN0X2lkIjoiMzU1NzA0OTkiLCJwcm9qZWN0X3BhdGgiOiJtc2thZXN6L3NlY3VyZWQtcGlwZWxpbmUtcHJvamVjdDEiLCJ1c2VyX2lkIjoiMjA1ODQzIiwidXNlcl9sb2dpbiI6Im1za2Flc3oiLCJ1c2VyX2VtYWlsIjoibXNrYWVzekBnb29nbGVtYWlsLmNvbSIsInBpcGVsaW5lX2lkIjoiNTIzMDE4NjEyIiwicGlwZWxpbmVfc291cmNlIjoid2ViIiwiam9iX2lkIjoiMjM2ODQ3OTgxNCIsInJlZiI6Im1haW4iLCJyZWZfdHlwZSI6ImJyYW5jaCIsInJlZl9wcm90ZWN0ZWQiOiJ0cnVlIiwianRpIjoiYTg2OWRiZjktZGU2Ni00NzI4LTk4NzYtMzA4N2NkZjBmMWNjIiwiaXNzIjoiZ2l0bGFiLmNvbSIsImlhdCI6MTY1MDcxNDM2MiwibmJmIjoxNjUwNzE0MzU3LCJleHAiOjE2NTA3MTc5NjIsInN1YiI6ImpvYl8yMzY4NDc5ODE0In0.2wtG9k0C424EWSTANKYbwRwarhYEm8jLfjdOPeORTLiQu_0yEBkTpUV8PI8SxvcG1utgkpjCN2qvyhwO92azizqlexo27H1yU8PIHpaqUDbG2Gf6-5Ydaum4yONjnFQ49R0j7P2pgyFFRmpvoRppcZ8vTc788fgg-5nwPvCEiJQ0OxbEbCOgOzLc9yInh-UJQArZ7Yl0W3wtrSddWHbXA7saYl4a8tx8htMuj3MEKcpqaCEPt_-_fvMyupDxp2mfIZrCA1CSHqirO5qiVVOE0p6aVDwbTfcB2L4H_z-DOgkJ_whIq7mI_NAY4JP6QAXDrgSgc7yMVCLnhLACXgmKQA"
+      role  = "aws-role"
     }
   }
 }
