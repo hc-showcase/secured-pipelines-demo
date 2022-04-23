@@ -59,6 +59,6 @@ Apply:
   script:
     - cat config.remote.tfbackend
     - terraform --version
-    - terraform init -backend-config=config.remote.tfbackend
+    - terraform init -backend-config=config.remote.tfbackend -reconfigure
     - terraform apply -auto-approve
 
