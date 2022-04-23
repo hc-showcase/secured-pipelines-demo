@@ -39,6 +39,10 @@ tf)
 cmd)
 	cmd
 	;;
+cleanup)
+	cd 04a_configure_aws_secre
+	terraform destroy
+	;;
 *)
 	echo "cmd for command line, tf for terraform"
 	;;

@@ -14,6 +14,7 @@ resource "gitlab_project" "secured-pipeline-project1" {
   description = "secured-pipeline-project1"
 
   visibility_level = "public"
+  shared_runners_enabled = true
 }
 
 resource "gitlab_project_variable" "vault_addr" {

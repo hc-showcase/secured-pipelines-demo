@@ -17,6 +17,10 @@ tf)
 cmd)
 	cmd
 	;;
+cleanup)
+	cd 01_setup_vault
+	terraform destroy
+	;;
 *)
 	echo "cmd for command line, tf for terraform"
 	;;

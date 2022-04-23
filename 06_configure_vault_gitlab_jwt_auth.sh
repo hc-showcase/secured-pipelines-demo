@@ -26,6 +26,10 @@ tf)
 cmd)
 	cmd
 	;;
+cleanup)
+	cd 06_configure_vault_gitlab_jwt_auth
+	terraform destroy
+	;;
 *)
 	echo "cmd for command line, tf for terraform"
 	;;

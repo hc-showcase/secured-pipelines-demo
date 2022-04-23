@@ -31,6 +31,10 @@ tf)
 cmd)
 	cmd
 	;;
+cleanup)
+	cd 05_configure_vault_tfc_secrets
+	terraform destroy
+	;;
 *)
 	echo "cmd for command line, tf for terraform"
 	;;
