@@ -49,4 +49,4 @@ deploy:
     - terraform --version
     - terraform init -backend-config=config.remote.tfbackend
     - terraform plan
-    - terraform apply --auto-approve
+    - terraform apply -auto-approve
