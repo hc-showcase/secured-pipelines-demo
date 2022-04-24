@@ -34,6 +34,27 @@ resource "vault_jwt_auth_backend_role" "jwt_auth" {
   role_type       = "jwt"
 }
 
+resource "vault_aws_secret_backend_role" "aws-role" {
+  backend         = file("../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_path")
+  name            = gitlab_project.secured-pipeline-project.name
+  credential_type = "iam_user"
+
+  policy_document = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:*", "ec2:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 resource "vault_terraform_cloud_secret_role" "terraform" {
   backend      = "terraform"
   name         = var.project_name

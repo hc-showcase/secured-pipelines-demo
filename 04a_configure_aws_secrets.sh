@@ -20,7 +20,7 @@ cmd)
 	cmd
 	;;
 cleanup)
-	cd 04a_configure_aws_secre
+	cd 04a_configure_aws_secrets
 	terraform destroy
 	;;
 *)
