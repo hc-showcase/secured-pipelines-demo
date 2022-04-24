@@ -17,11 +17,7 @@ tf() {
 }
 
 cmd() {
-	vault secrets disable terraform
-	vault secrets enable terraform
-
-	vault write terraform/config token=$TFC_SECURED_PIPELINE_DEMO
-	vault write terraform/role/user-token user_id=$user_id ttl=2m
+	vault read terraform/config
 }
 
 case $1 in

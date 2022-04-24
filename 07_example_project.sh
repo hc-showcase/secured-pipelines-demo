@@ -7,11 +7,9 @@ tf() {
 }
 
 cmd() {
-	vault write terraform/role/secured-pipeline-project1 user_id="${tfc_user_id}" ttl="1h" max_ttl="1h"
-	TFC_TOKEN=$(vault read terraform/creds/secure-pipeline-project1 -format=json | jq -r ".data.token")
-
+	vault list sys/leases/lookup/terraform/creds/secured-pipeline-project1
 	echo
-	vault list sys/leases/lookup/terraform/creds/
+	vault list sys/leases/lookup/aws/creds/aws-role
 }
 
 case $1 in

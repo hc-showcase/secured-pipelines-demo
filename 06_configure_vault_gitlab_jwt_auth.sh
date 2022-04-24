@@ -9,14 +9,7 @@ function tf() {
 }
 
 function cmd() {
-	vault auth disable jwt
-	vault auth enable jwt
-
-	echo && vault write auth/jwt/config \
-	            jwks_url="https://gitlab.com/-/jwks" \
-		    bound_issuer="gitlab.com"
-
-	echo && vault read auth/jwt/config
+	vault read auth/jwt/config
 }
 
 case $1 in
