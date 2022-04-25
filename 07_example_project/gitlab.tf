@@ -66,16 +66,6 @@ resource "gitlab_project_variable" "vault_aws_secret_backend_role" {
   protected    = false
 }
 
-resource "gitlab_repository_file" "pipeline" {
-  project        = gitlab_project.secured-pipeline-project1.id
-  content        = file("example-project/gitlab-ci.yml")
-  file_path      = ".gitlab-ci.yml"
-  branch         = "main"
-  author_email   = "terraform@example.com"
-  author_name    = "Terraform"
-  commit_message = "added gitlab pipeline descriptor"
-}
-
 resource "gitlab_repository_file" "main_tf" {
   project        = gitlab_project.secured-pipeline-project1.id
   content        = file("example-project/tf/aws/main.tf")
@@ -94,4 +84,14 @@ resource "gitlab_repository_file" "variables_tf" {
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
   commit_message = "[ci skip] added variables.tf"
+}
+
+resource "gitlab_repository_file" "pipeline" {
+  project        = gitlab_project.secured-pipeline-project1.id
+  content        = file("example-project/gitlab-ci.yml")
+  file_path      = ".gitlab-ci.yml"
+  branch         = "main"
+  author_email   = "terraform@example.com"
+  author_name    = "Terraform"
+  commit_message = "[ci skip] added gitlab pipeline descriptor"
 }

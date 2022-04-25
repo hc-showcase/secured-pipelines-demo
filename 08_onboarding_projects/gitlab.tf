@@ -74,7 +74,7 @@ resource "gitlab_repository_file" "pipeline" {
   branch         = "main"
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
-  commit_message = "gitlab pipeline descriptor"
+  commit_message = "[ci skip] gitlab pipeline descriptor"
 }
 
 resource "gitlab_repository_file" "main_tf" {
