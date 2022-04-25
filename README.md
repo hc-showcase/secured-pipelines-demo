@@ -1,3 +1,2 @@
 # secured-pipelines-demo
 
-itest
