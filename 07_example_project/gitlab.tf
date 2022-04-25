@@ -83,7 +83,7 @@ resource "gitlab_repository_file" "main_tf" {
   branch         = "main"
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
-  commit_message = "added main.tf"
+  commit_message = "[ci skip] added main.tf"
 }
 
 resource "gitlab_repository_file" "variables_tf" {
@@ -93,5 +93,5 @@ resource "gitlab_repository_file" "variables_tf" {
   branch         = "main"
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
-  commit_message = "added variables.tf"
+  commit_message = "[ci skip] added variables.tf"
 }
