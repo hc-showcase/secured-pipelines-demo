@@ -10,3 +10,8 @@ resource "vault_aws_secret_backend" "aws" {
   default_lease_ttl_seconds = "120"
   max_lease_ttl_seconds     = "240"
 }
+
+resource "local_file" "vault_aws_secret_backend_path" {
+    content  = vault_aws_secret_backend.aws.path
+    filename = "temp_data/vault_aws_secret_backend_path"
+}

@@ -62,7 +62,7 @@ resource "gitlab_project_variable" "vault_aws_secret_backend_path" {
 resource "gitlab_project_variable" "vault_aws_secret_backend_role" {
   project      = gitlab_project.secured-pipeline-project1.id
   key          = "vault_aws_secret_backend_role"
-  value        = file("../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_role")
+  value        = vault_aws_secret_backend_role.aws-role.name
   protected    = false
 }
 

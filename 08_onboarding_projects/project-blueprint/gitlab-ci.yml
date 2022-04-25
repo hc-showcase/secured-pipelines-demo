@@ -8,6 +8,7 @@ stages:
 
 prep:
   stage: prep
+  resource_group: tf
   script:
     - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=${CI_PROJECT_NAME} jwt=${CI_JOB_JWT})"
     - echo "VAULT token is $VAULT_TOKEN"
@@ -37,6 +38,7 @@ prep:
 
 plan:
   stage: plan
+  resource_group: tf
   dependencies:
     - prep
   script:
@@ -55,6 +57,7 @@ plan:
       - config.remote.tfbackend
 apply:
   stage: apply
+  resource_group: tf
   dependencies:
     - plan
   script:

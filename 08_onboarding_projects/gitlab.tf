@@ -14,6 +14,8 @@ resource "gitlab_project" "secured-pipeline-project" {
 
   visibility_level = "public"
   shared_runners_enabled = true
+  auto_devops_deploy_strategy = "manual"
+  auto_devops_enabled = false
 }
 
 resource "gitlab_project_variable" "vault_addr" {
@@ -61,7 +63,7 @@ resource "gitlab_project_variable" "vault_aws_secret_backend_path" {
 resource "gitlab_project_variable" "vault_aws_secret_backend_role" {
   project      = gitlab_project.secured-pipeline-project.id
   key          = "vault_aws_secret_backend_role"
-  value        = file("../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_role")
+  value        = vault_aws_secret_backend_role.aws-role.name
   protected    = false
 }
 
@@ -82,7 +84,7 @@ resource "gitlab_repository_file" "main_tf" {
   branch         = "main"
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
-  commit_message = "main.tf"
+  commit_message = "[ci skip] main.tf"
 }
 
 resource "gitlab_repository_file" "variables_tf" {
@@ -92,5 +94,5 @@ resource "gitlab_repository_file" "variables_tf" {
   branch         = "main"
   author_email   = "terraform@example.com"
   author_name    = "Terraform"
-  commit_message = "variables.tf"
+  commit_message = "[ci skip] variables.tf"
 }
