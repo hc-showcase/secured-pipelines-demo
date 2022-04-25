@@ -38,3 +38,8 @@ Cleanup onboarding projects:
 ```
 bash 08_onboarding_projects.sh off project_name
 ```
+
+Build and upload Docker image for Gitlab pipelines:
+```
+bash 30_build_and_publish_docker_image.sh
+```
