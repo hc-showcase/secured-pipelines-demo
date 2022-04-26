@@ -9,15 +9,6 @@ tf() {
 }
 
 cmd() {
-	vault secrets disable azure
-	vault secrets enable azure
-	source azure_creds
-	echo $ARM_CLIENT_ID
-	vault write azure/config \
-		subscription_id=$ARM_SUBSCRIPTION_ID \
-		tenant_id=$ARM_TENANT_ID \
-		client_id=$ARM_CLIENT_ID \
-		client_secret=$ARM_CLIENT_SECRET
 
 	vault write azure/roles/myproject ttl=1h azure_roles=- <<EOF
     [
@@ -48,6 +39,8 @@ EOF
 EOF
 
 	vault read azure/creds/myproject2
+
+	vault read azure/config
 }
 
 case $1 in

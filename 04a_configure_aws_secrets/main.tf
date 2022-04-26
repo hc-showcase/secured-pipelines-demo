@@ -1,3 +1,6 @@
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
+
 provider "vault" {}
 
 resource "vault_aws_secret_backend" "aws" {
