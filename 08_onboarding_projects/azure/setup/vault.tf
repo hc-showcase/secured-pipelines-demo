@@ -21,7 +21,7 @@ EOT
 }
 
 resource "vault_jwt_auth_backend_role" "jwt_auth" {
-  backend         = file("../06_configure_vault_gitlab_jwt_auth/temp_data/vault_jwt_auth_path")
+  backend         = file("../../../06_configure_vault_gitlab_jwt_auth/temp_data/vault_jwt_auth_path")
   role_name       = gitlab_project.secured-pipeline-project.name
   token_policies  = [gitlab_project.secured-pipeline-project.name]
 
@@ -35,18 +35,22 @@ resource "vault_jwt_auth_backend_role" "jwt_auth" {
 }
 
 resource "vault_azure_secret_backend_role" "azure-role" {
-  backend                     = file("../../04b_configure_azure_secrets/temp_data/vault_azure_secret_backend_path")
-  role                        = gitlab_project.secured-pipeline-project.name
-  ttl                         = 300
-  max_ttl                     = 600
+  backend     = file("../../../04b_configure_azure_secrets/temp_data/vault_azure_secret_backend_path")
+  role        = gitlab_project.secured-pipeline-project.name
+  ttl         = 300
+  max_ttl     = 600
+
+   azure_roles {
+    role_name = "Contributor"
+    scope     =  "/subscriptions/${var.arm_subscription_id}/resourceGroups/rg-mkaesz"
+  }
 
   azure_roles {
     role_name = "Reader"
     scope     =  "/subscriptions/${var.arm_subscription_id}"
-  ,
-    role_name = "Contributor"
-    scope     =  "/subscriptions/${var.arm_subscription_id}/resourceGroups/rg-mkaesz"
   }
+
+  
 }
 
 resource "vault_terraform_cloud_secret_role" "terraform" {

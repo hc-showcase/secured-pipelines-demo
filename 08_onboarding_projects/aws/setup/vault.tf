@@ -21,7 +21,7 @@ EOT
 }
 
 resource "vault_jwt_auth_backend_role" "jwt_auth" {
-  backend         = file("../06_configure_vault_gitlab_jwt_auth/temp_data/vault_jwt_auth_path")
+  backend         = file("../../../06_configure_vault_gitlab_jwt_auth/temp_data/vault_jwt_auth_path")
   role_name       = gitlab_project.secured-pipeline-project.name
   token_policies  = [gitlab_project.secured-pipeline-project.name]
 
@@ -35,7 +35,7 @@ resource "vault_jwt_auth_backend_role" "jwt_auth" {
 }
 
 resource "vault_aws_secret_backend_role" "aws-role" {
-  backend         = file("../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_path")
+  backend         = file("../../../04a_configure_aws_secrets/temp_data/vault_aws_secret_backend_path")
   name            = gitlab_project.secured-pipeline-project.name
   credential_type = "iam_user"
 

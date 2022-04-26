@@ -1,8 +1,11 @@
+variable "vault_azure_secret_backend_path" {}
+variable "vault_azure_secret_backend_role" {}
 variable "gitlab_jwt_token" {}
 variable "gitlab_jwt_role" {}
 variable "arm_subscription_id" {}
 variable "arm_tenant_id" {}
-variable "vault_addr"
+variable "vault_addr" {}
+variable "vault_namespace" {}
 
 terraform {
     backend "remote" {}
@@ -12,7 +15,7 @@ provider "vault" {
   address = var.vault_addr
   auth_login {
     path = "auth/jwt/login"
-
+    namespace = var.vault_namespace
     parameters = {
       jwt   = var.gitlab_jwt_token
       role  = var.gitlab_jwt_role
@@ -21,8 +24,8 @@ provider "vault" {
 }
 
 data "vault_azure_access_credentials" "creds" {
-  backend                     = "azure"
-  role                        = "myproject"
+  backend                     = var.vault_azure_secret_backend_path
+  role                        = var.vault_azure_secret_backend_role
   validate_creds              = true
   num_sequential_successes    = 8
   num_seconds_between_tests   = 7

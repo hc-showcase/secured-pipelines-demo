@@ -1,5 +1,6 @@
 #!/bin/sh
-set -x
+. 99_source_temp_data.sh
+
 on() {
     cloud=$1
     project_name=$2
@@ -10,16 +11,24 @@ on() {
 
     mkdir -p $project_path
     cp -r $blueprint_path/* $project_path
-    cd $base_path
+    cd $base_path/setup
     terraform init
-    terraform apply -var=project_name=$project_name -state=$terraform_state
+    terraform apply -auto-approve -var=project_name=$project_name -state=$terraform_state
 }
 
 off() {
-	project_name=$1
-	cd 08_onboarding_projects/
-	terraform destroy -var=project_name=$project_name -state=projects/$project_name/terraform-state
- 	rm -rf 08_onboarding_projects/projects/$project_name
+    cloud=$1
+    project_name=$2
+    base_path=08_onboarding_projects/$cloud
+    blueprint_path=$base_path/project-blueprint/
+    project_path=$base_path/projects/$project_name
+    terraform_state=projects/$project_name/terraform-state
+
+    cd $base_path/setup
+    terraform destroy -var=project_name=$project_name -state=$terraform_state
+    rm -rf projects/$project_name
+    cd -
+    rm -rf $project_path
 }
 
 cmd() {
@@ -31,16 +40,12 @@ on)
 	on $2 $3
 	;;
 off)
-	off $2
+	off $2 $3
 	;;
 cmd)
 	cmd
 	;;
-cleanup)
-	cd 08_onboarding
-	terraform destroy
-	;;
 *)
-	echo "cmd for command line, onb for onboarding, cleanup for cleanup"
+	echo "cmd for command line, on for onboarding, off for offboarding"
 	;;
 esac
