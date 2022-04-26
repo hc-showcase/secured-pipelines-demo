@@ -36,4 +36,4 @@ terraform.rc
 
 # Ignore all temp data folder
 **/temp_data/*
-**/08_onboarding_projects/projects/*
+**/08_onboarding_projects/**/projects/*

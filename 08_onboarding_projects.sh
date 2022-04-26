@@ -1,12 +1,18 @@
 #!/bin/sh
 set -x
 on() {
-	project_name=$1
-	mkdir -p 08_onboarding_projects/projects/$project_name
-	cp -r 08_onboarding_projects/project-blueprint/* 08_onboarding_projects/projects/$project_name
-	cd 08_onboarding_projects
-	terraform init
-	terraform apply -var=project_name=$project_name -state=projects/$project_name/terraform-state
+    cloud=$1
+    project_name=$2
+    base_path=08_onboarding_projects/$cloud
+    blueprint_path=$base_path/project-blueprint/
+    project_path=$base_path/projects/$project_name
+    terraform_state=projects/$project_name/terraform-state
+
+    mkdir -p $project_path
+    cp -r $blueprint_path/* $project_path
+    cd $base_path
+    terraform init
+    terraform apply -var=project_name=$project_name -state=$terraform_state
 }
 
 off() {
@@ -22,7 +28,7 @@ cmd() {
 
 case $1 in
 on)
-	on $2
+	on $2 $3
 	;;
 off)
 	off $2
