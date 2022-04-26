@@ -1,15 +1,15 @@
 terraform {
-  required_version = ">= 0.12.0"
+    backend "remote" {}
 }
 
 provider "vault" {
-  address = "http://vault:8200"
+  address = var.vault_addr
   auth_login {
     path = "auth/jwt/login"
 
     parameters = {
-      jwt   = var.GITLAB_JWT_TOKEN
-      role  = var.GITLAB_JWT_ROLE
+      jwt   = var.gitlab_jwt_token
+      role  = var.gitlab_jwt_role
     }
   }
 }
@@ -26,21 +26,21 @@ data "vault_azure_access_credentials" "creds" {
 
 provider "azurerm" {
   features {}
-  tenant_id = var.ARM_TENANT_ID
-  subscription_id = var.ARM_SUBSCRIPTION_ID
+  tenant_id = var.arm_tenant_id
+  subscription_id = var.arm_subscription_id
   client_id = data.vault_azure_access_credentials.creds.client_id
   client_secret = data.vault_azure_access_credentials.creds.client_secret
 }
 
-/*resource "azurerm_virtual_network" "example" {
-  name                = "gitlab-network"
-  resource_group_name = "kapil-arora"
+resource "azurerm_virtual_network" "example" {
+  name                = "nw-mkaesz"
+  resource_group_name = "rg-mkaesz"
   location            = "WestEurope"
   address_space       = ["10.0.0.0/16"]
   tags = {
     pipeline = "gitlab"
   }
-}*/
+}
 
 output "hello_world" {
   value = "Hello, World!"

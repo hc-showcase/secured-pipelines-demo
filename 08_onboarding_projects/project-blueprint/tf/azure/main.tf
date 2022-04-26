@@ -1,3 +1,7 @@
+terraform {
+    backend "remote" {}
+}
+
 provider "vault" {
   address = var.vault_addr
   auth_login {
