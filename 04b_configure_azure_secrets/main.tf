@@ -7,7 +7,7 @@ provider "vault" {}
 
 resource "vault_azure_secret_backend" "azure" {
   path			  = "azure"
-  use_microsoft_graph_api = false
+  use_microsoft_graph_api = true
   subscription_id         = var.arm_subscription_id
   tenant_id               = var.arm_tenant_id
   client_id               = var.arm_client_id
