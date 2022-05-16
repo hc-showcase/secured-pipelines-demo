@@ -1,3 +1,5 @@
+# Follow this guide to prepare Azure: https://learn.hashicorp.com/tutorials/vault/azure-secrets?in=vault/secrets-management#create-an-azure-service-principal-and-resource-group
+
 variable "arm_subscription_id" {}
 variable "arm_tenant_id" {}
 variable "arm_client_id" {}
