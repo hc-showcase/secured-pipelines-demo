@@ -1,15 +1,31 @@
 # secured-pipelines-demo
+Clone the repo:
+```
+git clone 
+cd secured-pipelines-demo/
+```
 
 Execute the following command to setup up everything:
 ```
 bash 00_check_prerequisites.sh tf
 
 bash 01_setup_vault.sh tf
+```
 
+Export VAULT ENV VARS:
+```
+export VAULT_ADDR=$(cat 01_setup_vault/temp_data/vault_public_endpoint_url)
+export VAULT_NAMESPACE=$(cat 01_setup_vault/temp_data/vault_admin_namespace)
+export VAULT_TOKEN=$(cat 01_setup_vault/temp_data/vault_admin_token)
+´´´
+
+Setup other components:
+```
 bash 02_setup_gitlab.com.sh tf
 
 bash 03_setup_tfc.sh tf
 ```
+
 For AWS:
 ```
 bash 04a_configure_aws_secrets.sh tf
