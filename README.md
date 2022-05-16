@@ -28,12 +28,16 @@ bash 06_configure_vault_gitlab_jwt_auth.sh tf
 
 Deploy multiple example projects:
 ```
-bash 08_onboarding_projects.sh on project_name
+action = on(boarding) or off(boarding)
+cloud = aws or azure
+bash 08_onboarding_projects.sh action cloud project_name
 ```
 
 Cleanup onboarding example projects:
 ```
-bash 08_onboarding_projects.sh off project_name
+action = on(boarding) or off(boarding)
+cloud = aws or azure
+bash 08_onboarding_projects.sh action cloud project_name
 ```
 
 Build and upload Docker image for Gitlab pipelines:
