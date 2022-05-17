@@ -13,3 +13,5 @@ export TF_VAR_arm_subscription_id=$ARM_SUBSCRIPTION_ID
 export TF_VAR_arm_tenant_id=$ARM_TENANT_ID
 export TF_VAR_arm_client_id=$ARM_CLIENT_ID
 export TF_VAR_arm_client_secret=$ARM_CLIENT_SECRET
+
+export TF_VAR_google_cloud_credentials=$GOOGLE_APPLICATION_CREDENTIALS
