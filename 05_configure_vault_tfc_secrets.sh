@@ -2,7 +2,7 @@
 
 . 99_source_temp_data.sh
 
-	user_id=$(curl -s \
+user_id=$(curl -s \
     --header "Authorization: Bearer $TFE_USER_TOKEN" \
     --header "Content-Type: application/vnd.api+json" \
     --request GET \

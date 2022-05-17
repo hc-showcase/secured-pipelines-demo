@@ -2,55 +2,49 @@
 
 . 99_source_temp_data.sh
 
+if [ -z "$ARM_SUBSCRIPTION_ID" ]
+then
+    echo "\$ARM_SUBSCRIPTION_ID must be set." >&2
+	exit -1
+fi
+
+if [ -z "$ARM_TENANT_ID" ]
+then
+    echo "\$ARM_TENANT_ID must be set." >&2
+	exit -1
+fi
+
+if [ -z "$ARM_CLIENT_ID" ]
+then
+    echo "\$ARM_CLIENT_ID must be set." >&2
+	exit -1
+fi
+
+if [ -z "$ARM_CLIENT_SECRET" ]
+then
+    echo "\$ARM_CLIENT_SECRET must be set." >&2
+	exit -1
+fi
+
 tf() {
 	cd 04b_configure_azure_secrets
 	terraform init
 	terraform apply --auto-approve
 }
 
-cmd() {
-
-	vault write azure/roles/myproject ttl=1h azure_roles=- <<EOF
-    [
-        {
-            "role_name": "Contributor",
-            "scope":  "/subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/kapil-arora"
-        },
-        {
-            "role_name": "Reader",
-            "scope":  "/subscriptions/${ARM_SUBSCRIPTION_ID}"
-        }
-    ]
-EOF
-
-	vault read azure/creds/myproject
-
-	vault write azure/roles/myproject2 ttl=1h azure_roles=- <<EOF
-    [
-        {
-            "role_name": "Contributor",
-            "scope":  "/subscriptions/${ARM_SUBSCRIPTION_ID}/resourceGroups/kapil-arora"
-        },
-        {
-            "role_name": "Reader",
-            "scope":  "/subscriptions/${ARM_SUBSCRIPTION_ID}"
-        }
-    ]
-EOF
-
-	vault read azure/creds/myproject2
-
-	vault read azure/config
+cleanup() {
+	cd 04b_configure_azure_secrets
+	terraform destroy
 }
 
 case $1 in
 tf)
 	tf
 	;;
-cmd)
-	cmd
+cleanup)
+	cleanup
 	;;
 *)
-	echo "cmd for command line, tf for terraform"
+	echo "cleanup to destroy, tf for terraform"
 	;;
 esac

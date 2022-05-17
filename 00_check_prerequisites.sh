@@ -19,9 +19,18 @@ then
 	exit -1
 fi
 
+# TFE Org token
 if [ -z "$TFE_TOKEN" ]
 then
     echo "\$TFE_TOKEN must be set." >&2
 	exit -1
 fi
+
+# TFE User token
+if [ -z "$TFE_USER_TOKEN" ]
+then
+    echo "\$TFE_USER_TOKEN must be set." >&2
+	exit -1
+fi
+
 
