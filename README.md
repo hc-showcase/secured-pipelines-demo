@@ -12,13 +12,6 @@ bash 00_check_prerequisites.sh
 bash 01_setup_vault.sh tf
 ```
 
-Export VAULT ENV VARS:
-```
-export VAULT_ADDR=$(cat 01_setup_vault/temp_data/vault_public_endpoint_url)
-export VAULT_NAMESPACE=$(cat 01_setup_vault/temp_data/vault_admin_namespace)
-export VAULT_TOKEN=$(cat 01_setup_vault/temp_data/vault_admin_token)
-´´´
-
 Setup other components:
 ```
 bash 02_setup_gitlab.com.sh tf
