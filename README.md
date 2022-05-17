@@ -7,7 +7,7 @@ cd secured-pipelines-demo/
 
 Execute the following command to setup up everything:
 ```
-bash 00_check_prerequisites.sh tf
+bash 00_check_prerequisites.sh
 
 bash 01_setup_vault.sh tf
 ```
