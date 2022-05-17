@@ -29,6 +29,12 @@ For Azure:
 bash 04b_configure_azure_secrets.sh tf
 ```
 
+For GCP:
+```
+bash 04c_configure_gcp_secrets.sh tf
+```
+
+Configure TFC Engine and JWT Auth:
 ```
 bash 05_configure_vault_tfc_secrets.sh tf
 
