@@ -9,8 +9,13 @@ terraform {
 provider "gitlab" {
 }
 
+data "gitlab_group" "secured-pipelines-projects" {
+  full_path = "secured-pipeline-projects"
+}
+
 resource "gitlab_project" "secured-pipeline-project" {
   name        = var.project_name
+  namespace_id = data.gitlab_group.secured-pipelines-projects.id
 
   visibility_level = "public"
   shared_runners_enabled = true
